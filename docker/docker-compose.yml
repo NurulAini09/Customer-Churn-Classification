@@ -1,0 +1,18 @@
+services:
+  backend-python:
+    build:
+      context: ..
+      dockerfile: docker/backend.Dockerfile
+    ports:
+      - "5001:5001"
+
+  frontend-laravel:
+    build:
+      context: ..
+      dockerfile: docker/frontend.Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      PYTHON_PREDICTION_URL: http://backend-python:5001/predict
+    depends_on:
+      - backend-python

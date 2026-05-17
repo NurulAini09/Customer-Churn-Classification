@@ -1,0 +1,36 @@
+# Environment files
+.env
+*.env
+backend-python/.env
+frontend-laravel/.env
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+backend-python/.venv/
+
+# Laravel / PHP
+vendor/
+frontend-laravel/vendor/
+frontend-laravel/storage/logs/*.log
+frontend-laravel/bootstrap/cache/*.php
+
+# Node / build
+node_modules/
+frontend-laravel/node_modules/
+frontend-laravel/public/build/
+
+# Runtime data
+*.log
+*.sqlite
+*.sqlite3
+backend-python/*.log
+frontend-laravel/database/*.sqlite
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
