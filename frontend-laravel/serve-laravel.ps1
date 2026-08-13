@@ -1,12 +1,25 @@
-$phpCommand = Get-Command php -ErrorAction Stop
-$phpPath = $phpCommand.Source
-$extensionDir = Join-Path (Split-Path $phpPath -Parent) "ext"
+function Get-PhpExecutable {
+    $candidates = @(
+        "C:\laragon\bin\php\php-8.3.15-nts-Win32-vs16-x64\php.exe"
+    )
 
-if (-not (Test-Path $phpPath)) {
-    throw "PHP executable tidak ditemukan. Pastikan PHP Laragon sudah masuk PATH."
+    foreach ($candidate in $candidates) {
+        if (Test-Path -LiteralPath $candidate) {
+            return $candidate
+        }
+    }
+
+    if (Get-Command php -ErrorAction SilentlyContinue) {
+        return (Get-Command php -ErrorAction Stop).Source
+    }
+
+    throw "PHP executable tidak ditemukan. Pastikan PHP Laragon tersedia atau sudah masuk PATH."
 }
 
-if (-not (Test-Path $extensionDir)) {
+$phpPath = Get-PhpExecutable
+$extensionDir = Join-Path (Split-Path $phpPath -Parent) "ext"
+
+if (-not (Test-Path -LiteralPath $extensionDir)) {
     throw "Folder extension PHP tidak ditemukan: $extensionDir"
 }
 

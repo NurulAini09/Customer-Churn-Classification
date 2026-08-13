@@ -137,10 +137,12 @@
     @php
       $navigation = [
         ['key' => 'dashboard', 'label' => 'Dashboard', 'route' => 'prediction.index', 'icon' => 'layout-dashboard'],
-        ['key' => 'prediction', 'label' => 'Prediksi Churn', 'route' => 'prediction.page', 'icon' => 'activity'],
-        ['key' => 'history', 'label' => 'Riwayat Prediksi', 'route' => 'prediction.history.page', 'icon' => 'history'],
+        ['key' => 'prediction', 'label' => 'Klasifikasi Churn', 'route' => 'prediction.page', 'icon' => 'activity'],
+        ['key' => 'history', 'label' => 'Riwayat Klasifikasi', 'route' => 'prediction.history.page', 'icon' => 'history'],
         ['key' => 'model', 'label' => 'Informasi Model', 'route' => 'prediction.model.page', 'icon' => 'cpu'],
         ['key' => 'about', 'label' => 'Tentang Sistem', 'route' => 'prediction.about.page', 'icon' => 'info'],
+        ['key' => 'profile', 'label' => 'Profile', 'route' => 'profile.page', 'icon' => 'user'],
+        ['key' => 'users', 'label' => 'Users', 'route' => 'users.page', 'icon' => 'users'],
       ];
     @endphp
 

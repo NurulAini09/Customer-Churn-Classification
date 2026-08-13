@@ -2,19 +2,36 @@ import Alpine from 'alpinejs';
 import 'flowbite';
 import {
   Activity,
+  ArrowRight,
+  BrainCircuit,
+  Camera,
+  CirclePlay,
   Cpu,
   createIcons,
   ExternalLink,
+  Files,
+  Gauge,
   History,
+  ImageOff,
   Info,
   LayoutDashboard,
+  Lock,
+  LogIn,
+  LogOut,
+  Mail,
   Moon,
   Plus,
   RotateCcw,
   Send,
+  ShieldCheck,
   Sparkles,
+  Siren,
   Sun,
   Trash2,
+  Upload,
+  User,
+  Users,
+  Zap,
 } from 'lucide';
 
 window.Alpine = Alpine;
@@ -23,18 +40,35 @@ Alpine.start();
 const iconSet = {
   icons: {
     Activity,
+    ArrowRight,
+    BrainCircuit,
+    Camera,
+    CirclePlay,
     Cpu,
     ExternalLink,
+    Files,
+    Gauge,
     History,
+    ImageOff,
     Info,
     LayoutDashboard,
+    Lock,
+    LogIn,
+    LogOut,
+    Mail,
     Moon,
     Plus,
     RotateCcw,
     Send,
+    ShieldCheck,
     Sparkles,
+    Siren,
     Sun,
     Trash2,
+    Upload,
+    User,
+    Users,
+    Zap,
   },
 };
 
@@ -82,6 +116,10 @@ const replacePage = (html, url) => {
 };
 
 document.addEventListener('click', async (event) => {
+  if (!document.getElementById('page-content')) {
+    return;
+  }
+
   const link = event.target.closest('a');
 
   if (!link || link.target || link.hasAttribute('download')) {

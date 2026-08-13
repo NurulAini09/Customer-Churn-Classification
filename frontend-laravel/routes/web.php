@@ -3,11 +3,29 @@
 use App\Http\Controllers\PredictionController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [PredictionController::class, 'index'])->name('prediction.index');
-Route::get('/prediksi', [PredictionController::class, 'predictionPage'])->name('prediction.page');
-Route::get('/riwayat', [PredictionController::class, 'historyPage'])->name('prediction.history.page');
-Route::get('/informasi-model', [PredictionController::class, 'modelPage'])->name('prediction.model.page');
-Route::get('/tentang-sistem', [PredictionController::class, 'aboutPage'])->name('prediction.about.page');
-Route::post('/predict', [PredictionController::class, 'predict'])->name('prediction.predict');
-Route::post('/history/clear', [PredictionController::class, 'clearHistory'])->name('prediction.history.clear');
-Route::get('/reset', [PredictionController::class, 'reset'])->name('prediction.reset');
+Route::get('/', [PredictionController::class, 'landingPage'])->name('landing');
+Route::get('/login', [PredictionController::class, 'loginPage'])->name('login');
+Route::post('/login', [PredictionController::class, 'login'])->name('login.attempt');
+Route::get('/daftar', [PredictionController::class, 'registerPage'])->name('register');
+Route::post('/daftar', [PredictionController::class, 'register'])->name('register.store');
+Route::get('/reset-password', [PredictionController::class, 'resetPasswordPage'])->name('password.request');
+Route::post('/reset-password', [PredictionController::class, 'resetPassword'])->name('password.update');
+
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [PredictionController::class, 'logout'])->name('logout');
+
+    Route::get('/dashboard', [PredictionController::class, 'index'])->name('prediction.index');
+    Route::get('/klasifikasi', [PredictionController::class, 'predictionPage'])->name('prediction.page');
+    Route::get('/riwayat', [PredictionController::class, 'historyPage'])->name('prediction.history.page');
+    Route::get('/informasi-model', [PredictionController::class, 'modelPage'])->name('prediction.model.page');
+    Route::get('/tentang-sistem', [PredictionController::class, 'aboutPage'])->name('prediction.about.page');
+    Route::get('/profile', [PredictionController::class, 'profilePage'])->name('profile.page');
+    Route::post('/profile/photo', [PredictionController::class, 'updateProfilePhoto'])->name('profile.photo.update');
+    Route::post('/profile/photo/delete', [PredictionController::class, 'deleteProfilePhoto'])->name('profile.photo.delete');
+    Route::post('/profile/reset-password', [PredictionController::class, 'updateProfilePassword'])->name('profile.password.update');
+    Route::get('/users', [PredictionController::class, 'usersPage'])->name('users.page');
+    Route::post('/predict', [PredictionController::class, 'predict'])->name('prediction.predict');
+    Route::post('/history/clear', [PredictionController::class, 'clearHistory'])->name('prediction.history.clear');
+    Route::post('/history/{history}/delete', [PredictionController::class, 'deleteHistory'])->name('prediction.history.delete');
+    Route::get('/reset', [PredictionController::class, 'reset'])->name('prediction.reset');
+});

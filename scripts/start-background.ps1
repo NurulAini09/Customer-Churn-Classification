@@ -5,15 +5,58 @@ $pythonDir = Join-Path $rootDir "backend-python"
 $laravelDir = Join-Path $rootDir "frontend-laravel"
 $pythonExe = Join-Path $pythonDir ".venv\Scripts\python.exe"
 
+function New-PythonVirtualEnvironment {
+    $laragonPython = "C:\laragon\bin\python\python-3.10\python.exe"
+
+    if (Test-Path -LiteralPath $laragonPython) {
+        & $laragonPython -m venv .venv
+        return
+    }
+
+    if (Get-Command py -ErrorAction SilentlyContinue) {
+        & py -3.10 -m venv .venv
+        return
+    }
+
+    if (Get-Command python -ErrorAction SilentlyContinue) {
+        & python -m venv .venv
+        return
+    }
+
+    throw "Python tidak ditemukan. Instal Python atau perbarui script startup."
+}
+
+function Get-PhpExecutable {
+    $candidates = @(
+        "C:\laragon\bin\php\php-8.3.15-nts-Win32-vs16-x64\php.exe"
+    )
+
+    foreach ($candidate in $candidates) {
+        if (Test-Path -LiteralPath $candidate) {
+            return $candidate
+        }
+    }
+
+    if (Get-Command php -ErrorAction SilentlyContinue) {
+        return (Get-Command php -ErrorAction Stop).Source
+    }
+
+    throw "PHP tidak ditemukan. Pastikan Laragon tersedia atau tambahkan PHP ke PATH."
+}
+
 if (-not (Test-Path -LiteralPath $pythonExe)) {
     Write-Host "Python virtual environment belum ada. Membuat .venv dan menginstall dependency..."
     Set-Location -LiteralPath $pythonDir
-    python -m venv .venv
+    New-PythonVirtualEnvironment
+
+    if (-not (Test-Path -LiteralPath $pythonExe)) {
+        throw ".venv gagal dibuat di $pythonDir"
+    }
+
     & $pythonExe -m pip install -r requirements.txt
 }
 
-$phpCommand = Get-Command php -ErrorAction Stop
-$phpPath = $phpCommand.Source
+$phpPath = Get-PhpExecutable
 $extensionDir = Join-Path (Split-Path $phpPath -Parent) "ext"
 
 Write-Host "Menjalankan FastAPI prediction service..."

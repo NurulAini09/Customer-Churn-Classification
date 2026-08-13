@@ -16,14 +16,14 @@ class PredictionApiService
                 ->post(config('services.prediction.url'), $payload);
         } catch (ConnectionException $exception) {
             throw new RuntimeException(
-                'Service prediksi Python belum aktif atau tidak dapat dihubungi. Detail: '.$exception->getMessage(),
+                'Service klasifikasi Python belum aktif atau tidak dapat dihubungi. Detail: '.$exception->getMessage(),
                 previous: $exception,
             );
         }
 
         if ($response->failed()) {
             throw new RuntimeException(
-                $response->json('message') ?? $response->json('detail') ?? 'Terjadi error saat memproses prediksi.',
+                $response->json('message') ?? $response->json('detail') ?? 'Terjadi error saat memproses klasifikasi.',
             );
         }
 

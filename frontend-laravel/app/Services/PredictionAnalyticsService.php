@@ -11,21 +11,15 @@ class PredictionAnalyticsService
     {
         $histories = PredictionHistory::query()->latest()->limit(50)->get();
         $total = PredictionHistory::query()->count();
-        $churnCount = PredictionHistory::query()->where('prediction_result', 'Churn')->count();
         $highRiskCount = PredictionHistory::query()->where('risk_level', 'Tinggi')->count();
         $averageProbability = (float) PredictionHistory::query()->avg('probability');
 
         return [
             'stats' => [
                 [
-                    'label' => 'Total Prediksi',
+                    'label' => 'Total Klasifikasi',
                     'value' => number_format($total),
                     'trend' => 'Riwayat tersimpan',
-                ],
-                [
-                    'label' => 'Churn Rate',
-                    'value' => $total > 0 ? number_format(($churnCount / $total) * 100, 1).'%' : '0%',
-                    'trend' => $churnCount.' pelanggan churn',
                 ],
                 [
                     'label' => 'Avg Probability',
@@ -33,9 +27,9 @@ class PredictionAnalyticsService
                     'trend' => 'Rata-rata risiko',
                 ],
                 [
-                    'label' => 'High Risk',
+                    'label' => 'Prioritas',
                     'value' => number_format($highRiskCount),
-                    'trend' => 'Perlu prioritas',
+                    'trend' => 'Risiko tinggi',
                 ],
             ],
             'riskDistribution' => $this->riskDistribution(),
@@ -81,14 +75,32 @@ class PredictionAnalyticsService
     private function formatHistory(Collection $histories): array
     {
         return $histories
-            ->map(fn (PredictionHistory $item) => [
-                'timestamp' => $item->created_at->format('d/m/Y H:i'),
-                'result' => $item->prediction_result,
-                'probability' => $item->probability,
-                'risiko' => $item->risk_level,
-                'area_code' => $item->area_code,
-                'customer_service_calls' => $item->customer_service_calls,
-            ])
+            ->map(function (PredictionHistory $item) {
+                $probability = (float) $item->probability;
+                $isChurn = $item->prediction_result === 'Churn';
+
+                return [
+                    'id' => $item->id,
+                    'timestamp' => $item->created_at->format('d/m/Y'),
+                    'result' => $item->prediction_result,
+                    'probability' => $item->probability,
+                    'risiko' => $item->risk_level,
+                    'area_code' => $item->area_code,
+                    'customer_service_calls' => $item->customer_service_calls,
+                    'account_length' => $item->account_length,
+                    'international_plan' => (int) $item->international_plan === 1 ? 'Yes' : 'No',
+                    'voice_mail_plan' => (int) $item->voice_mail_plan === 1 ? 'Yes' : 'No',
+                    'total_day_minutes' => $item->total_day_minutes,
+                    'total_eve_minutes' => $item->total_eve_minutes,
+                    'total_night_minutes' => $item->total_night_minutes,
+                    'total_intl_minutes' => $item->total_intl_minutes,
+                    'description' => $isChurn
+                        ? 'Pelanggan masuk ke kelas churn berdasarkan data layanan yang tersimpan.'
+                        : 'Pelanggan masuk ke kelas tidak churn berdasarkan data layanan yang tersimpan.',
+                    'confidence_label' => $probability >= 70 ? 'Keyakinan tinggi' : ($probability >= 40 ? 'Keyakinan sedang' : 'Keyakinan rendah'),
+                ];
+            })
             ->all();
     }
 }
+

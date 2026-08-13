@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Prediksi Churn - ChurnPredict AI')
-@section('page-title', 'Prediksi Churn')
+@section('title', 'Klasifikasi Churn - ChurnPredict AI')
+@section('page-title', 'Klasifikasi Churn')
 
 @section('content')
   @php
@@ -13,7 +13,7 @@
 
   <div class="sticky top-0 z-20 -mx-5 mb-3 flex flex-col gap-3 bg-[#F3F6FA] px-5 py-3 sm:-mx-6 sm:flex-row sm:items-center sm:justify-between sm:px-6">
     <div>
-      <h2 class="text-xl font-bold text-[#102A43]">Prediksi Churn</h2>
+      <h2 class="text-xl font-bold text-[#102A43]">Klasifikasi Churn</h2>
       <p class="mt-1 text-xs font-medium text-[#64748B]">Kirim data pelanggan ke FastAPI</p>
     </div>
     <div class="flex flex-wrap gap-2">
@@ -23,7 +23,7 @@
       </a>
       <button form="prediction-form" type="submit" class="inline-flex h-9 items-center gap-2 rounded-md bg-[#DB5A8D] px-3.5 text-xs font-semibold text-white transition hover:bg-[#C84A7B]">
         <i data-lucide="send" class="h-4 w-4"></i>
-        Jalankan Prediksi
+        Jalankan Klasifikasi
       </button>
     </div>
   </div>
@@ -81,7 +81,7 @@
     <div class="space-y-5">
       <section class="rounded-md border border-[#D8E2EC] bg-white">
         <div class="border-b border-[#D8E2EC] px-5 py-4">
-          <h3 class="text-base font-semibold text-[#102A43]">Hasil Prediksi</h3>
+          <h3 class="text-base font-semibold text-[#102A43]">Hasil Klasifikasi</h3>
           <p class="mt-1 text-xs text-[#64748B]">Output model dan risk scoring.</p>
         </div>
         <div class="p-5">
@@ -100,7 +100,7 @@
             </div>
           @else
             <div class="grid min-h-36 place-items-center rounded-md border border-dashed border-[#D8E2EC] bg-[#F8FAFC] p-6 text-center text-sm font-medium leading-6 text-[#64748B]">
-              Hasil prediksi akan tampil setelah data pelanggan diproses.
+              Hasil klasifikasi akan tampil setelah data pelanggan diproses.
             </div>
           @endif
         </div>
@@ -127,7 +127,7 @@
               @endforeach
             </div>
           @else
-            <div class="rounded-md border border-dashed border-[#D8E2EC] bg-[#F8FAFC] p-5 text-sm font-medium leading-6 text-[#64748B]">Faktor pengaruh model akan tampil setelah prediksi tersedia.</div>
+            <div class="rounded-md border border-dashed border-[#D8E2EC] bg-[#F8FAFC] p-5 text-sm font-medium leading-6 text-[#64748B]">Faktor pengaruh model akan tampil setelah hasil klasifikasi tersedia.</div>
           @endif
         </div>
       </section>
