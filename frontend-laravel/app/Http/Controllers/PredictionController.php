@@ -85,6 +85,13 @@ class PredictionController extends Controller
         return $this->renderPage($request, 'history');
     }
 
+    public function historyJson(Request $request)
+    {
+        return response()->json([
+            'history' => $this->analytics->recentHistory(),
+        ]);
+    }
+
     public function modelPage(Request $request)
     {
         return $this->renderPage($request, 'model');
@@ -207,7 +214,11 @@ class PredictionController extends Controller
     public function updateProfilePhoto(Request $request)
     {
         $validated = $request->validate([
-            'photo' => 'required|image|max:2048',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+        ], [
+            'photo.image' => 'File harus berupa gambar.',
+            'photo.mimes' => 'Format gambar yang diizinkan hanya JPG, JPEG, PNG, dan WEBP.',
+            'photo.max' => 'Ukuran foto maksimal adalah 2MB.',
         ]);
 
         $user = $request->user();
@@ -219,13 +230,16 @@ class PredictionController extends Controller
         $directory = public_path('profile-photos');
 
         if (!is_dir($directory)) {
-            mkdir($directory, 0775, true);
+            mkdir($directory, 0755, true);
         }
 
         $this->deleteExistingProfilePhoto($user->id);
 
         $photo = $validated['photo'];
-        $extension = $photo->guessExtension() ?: $photo->extension() ?: 'jpg';
+        $rawExt = strtolower($photo->getClientOriginalExtension());
+        $allowed = ['jpg', 'jpeg', 'png', 'webp'];
+        $extension = in_array($rawExt, $allowed, true) ? $rawExt : 'jpg';
+        
         $photo->move($directory, sprintf('user-%d.%s', $user->id, $extension));
 
         return redirect()->route('profile.page')->with('success_message', 'Foto profil berhasil diperbarui.');

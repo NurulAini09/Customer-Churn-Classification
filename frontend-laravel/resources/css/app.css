@@ -7,8 +7,126 @@
 @source '../../node_modules/flowbite/**/*.js';
 
 @theme {
-    --font-sans: 'Inter', 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Poppins', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 @plugin "flowbite/plugin";
+
+/* ============================================================
+   Global Font Override: Poppins throughout the entire app
+   ============================================================ */
+*, *::before, *::after {
+  font-family: 'Poppins', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Browser-reset override: form elements often inherit system font separately */
+input, select, textarea, button, label, th, td, li, a, span, p, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ============================================================
+   Heading weight softening: prevent overly bold page titles
+   extrabold (800) → semibold (600), bold (700) → medium (500)
+   ============================================================ */
+h1 {
+  font-weight: 600; /* semibold — not too heavy */
+}
+
+h2 {
+  font-weight: 600;
+}
+
+h3 {
+  font-weight: 500; /* medium */
+}
+
+
+/* ============================================================
+   Soften sharp black text: slate-900 -> slate-700 equivalent
+   This overrides Tailwind's .text-slate-900 class globally
+   ============================================================ */
+.text-slate-900 {
+  color: #374151 !important; /* gray-700 — warm grey, not pure black */
+}
+
+html.dark .text-slate-900 {
+  color: #E2E8F0 !important; /* keep it bright on dark mode */
+}
+
+/* Also soften text-slate-800 slightly */
+.text-slate-800 {
+  color: #4B5563 !important; /* gray-600 */
+}
+
+html.dark .text-slate-800 {
+  color: #CBD5E1 !important;
+}
+
+
+
+/* Custom modern animations & utility classes */
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}
+
+.status-pulse-dot {
+  animation: pulseGlow 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.stat-card-glow {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+}
+
+/* Custom interactive range slider */
+input[type="range"].accent-slider {
+  accent-color: #4F46E5;
+}
+
+input[type="range"].accent-slider::-webkit-slider-thumb {
+  width: 18px;
+  height: 18px;
+  background-color: #4F46E5;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.4);
+  cursor: pointer;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.7);
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: rgba(51, 65, 85, 0.6);
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(71, 85, 105, 0.8);
+}
+

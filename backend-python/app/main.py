@@ -24,13 +24,19 @@ app.add_middleware(
 )
 
 
+import logging
+
+logger = logging.getLogger("uvicorn.error")
+
+
 @app.exception_handler(Exception)
 async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    logger.error(f"Unhandled exception encountered: {exc}", exc_info=True)
     return JSONResponse(
         status_code=500,
         content={
             "success": False,
-            "message": f"Terjadi error tidak terduga pada prediction service: {exc}",
+            "message": "Terjadi kendala internal pada prediction service. Silakan coba beberapa saat lagi.",
         },
     )
 

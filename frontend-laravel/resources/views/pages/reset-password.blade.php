@@ -3,55 +3,156 @@
 @section('title', 'Reset Password - ChurnPredict AI')
 
 @section('content')
-  <main class="grid min-h-screen place-items-center px-5 py-8">
-    <section class="w-full max-w-[420px] rounded-md border border-[#D8E2EC] bg-white shadow-[0_24px_80px_rgba(15,23,42,0.08)]">
-      <div class="border-b border-[#D8E2EC] px-6 py-5">
-        <div class="mb-4 grid h-10 w-10 place-items-center rounded-md bg-[#DB5A8D] text-sm font-bold text-white">CP</div>
-        <h1 class="text-[22px] font-bold text-[#102A43]">Reset Password</h1>
-        <p class="mt-1 text-[13px] leading-6 text-[#64748B]">Masukkan email dan password baru untuk akun Anda.</p>
+  <main class="grid min-h-screen place-items-center px-4 py-10 relative overflow-hidden" style="background: #F5F7FA;">
+    {{-- Subtle background ambient glow --}}
+    <div class="pointer-events-none absolute inset-0" style="background: radial-gradient(circle at 50% 20%, rgba(37,99,235,0.04), transparent 60%), radial-gradient(circle at 70% 80%, rgba(59,130,246,0.03), transparent 50%);"></div>
+
+    <section class="relative w-full max-w-[400px]" x-data="{ showPassword: false, showConfirm: false }">
+      {{-- Back to login link --}}
+      <div style="text-align: center; margin-bottom: 20px;">
+        <a
+          href="{{ route('login') }}"
+          style="font-family: 'Poppins', sans-serif; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: #94A3B8; text-decoration: none; transition: color 0.2s;"
+          onmouseover="this.style.color='#2563EB'"
+          onmouseout="this.style.color='#94A3B8'"
+        >
+          <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i>
+          Kembali ke Login
+        </a>
       </div>
 
-      <div class="p-6">
+      {{-- Card Container --}}
+      <div style="border-radius: 24px; box-shadow: 0 12px 48px rgba(15,23,42,0.07), 0 2px 8px rgba(15,23,42,0.04); background: #ffffff; padding: 40px 32px 36px;">
+        {{-- Branding / Header --}}
+        <div style="text-align: center; margin-bottom: 32px;">
+          <div style="display: inline-flex; align-items: center; justify-content: center; width: 56px; height: 56px; border-radius: 18px; background: linear-gradient(135deg, #2563EB, #3B82F6); box-shadow: 0 8px 24px rgba(37,99,235,0.25); margin-bottom: 14px;">
+            <i data-lucide="key-round" style="width: 28px; height: 28px; color: #ffffff;"></i>
+          </div>
+          <h1 style="font-family: 'Poppins', sans-serif; font-size: 20px; font-weight: 600; color: #1E293B; letter-spacing: -0.3px; margin: 0;">
+            Atur Ulang Password
+          </h1>
+          <p style="font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 400; color: #94A3B8; margin-top: 4px;">
+            Masukkan email dan password baru akun Anda
+          </p>
+        </div>
+
+        {{-- Validation Error Alerts --}}
         @if ($errors->any())
-          <div class="mb-4 rounded-md border border-[#e7d599] bg-[#fff9df] px-3 py-2 text-[13px] font-medium text-[#886b14]">
-            Pastikan email dan konfirmasi password sudah benar.
+          <div style="display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 14px; background: #FFF7ED; border: 1px solid #FED7AA; margin-bottom: 20px;">
+            <i data-lucide="alert-circle" style="width: 16px; height: 16px; color: #F59E0B; flex-shrink: 0; margin-top: 1px;"></i>
+            <span style="font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 500; color: #92400E;">{{ $errors->first() }}</span>
           </div>
         @endif
 
-        <form method="POST" action="{{ route('password.update') }}" class="space-y-4">
+        {{-- Form Reset Password --}}
+        <form method="POST" action="{{ route('password.update') }}" id="resetPasswordForm">
           @csrf
-          <label class="block">
-            <span class="mb-1.5 block text-xs font-semibold text-[#475569]">Email</span>
-            <span class="flex h-10 items-center gap-2 rounded-md border border-[#D8E2EC] bg-white px-3 transition focus-within:border-[#DB5A8D]">
-              <i data-lucide="mail" class="h-4 w-4 shrink-0 text-[#64748B]"></i>
-              <input name="email" type="email" value="{{ old('email') }}" required autocomplete="email" class="h-full min-w-0 flex-1 border-0 bg-transparent p-0 text-sm font-medium text-[#102A43] outline-none" placeholder="nama@example.com">
-            </span>
-          </label>
 
-          <label class="block">
-            <span class="mb-1.5 block text-xs font-semibold text-[#475569]">Password Baru</span>
-            <span class="flex h-10 items-center gap-2 rounded-md border border-[#D8E2EC] bg-white px-3 transition focus-within:border-[#DB5A8D]">
-              <i data-lucide="lock" class="h-4 w-4 shrink-0 text-[#64748B]"></i>
-              <input name="password" type="password" required autocomplete="new-password" class="h-full min-w-0 flex-1 border-0 bg-transparent p-0 text-sm font-medium text-[#102A43] outline-none" placeholder="Minimal 6 karakter">
-            </span>
-          </label>
+          {{-- Email --}}
+          <div style="margin-bottom: 16px;">
+            <label for="resetEmailInput" style="font-family: 'Poppins', sans-serif; display: block; font-size: 13px; font-weight: 500; color: #475569; margin-bottom: 8px;">
+              Email Terdaftar
+            </label>
+            <input
+              id="resetEmailInput"
+              name="email"
+              type="email"
+              value="{{ old('email') }}"
+              required
+              autocomplete="email"
+              placeholder="nama@email.com"
+              style="font-family: 'Poppins', sans-serif; width: 100%; height: 48px; border-radius: 50px; border: 1.5px solid #DBEAFE; background: #F8FAFF; padding: 0 20px; font-size: 13px; color: #334155; outline: none; transition: all 0.2s ease; box-sizing: border-box;"
+              onfocus="this.style.borderColor='#3B82F6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.1)'; this.style.background='#FFFFFF';"
+              onblur="this.style.borderColor='#DBEAFE'; this.style.boxShadow='none'; this.style.background='#F8FAFF';"
+            >
+          </div>
 
-          <label class="block">
-            <span class="mb-1.5 block text-xs font-semibold text-[#475569]">Konfirmasi Password</span>
-            <span class="flex h-10 items-center gap-2 rounded-md border border-[#D8E2EC] bg-white px-3 transition focus-within:border-[#DB5A8D]">
-              <i data-lucide="lock" class="h-4 w-4 shrink-0 text-[#64748B]"></i>
-              <input name="password_confirmation" type="password" required autocomplete="new-password" class="h-full min-w-0 flex-1 border-0 bg-transparent p-0 text-sm font-medium text-[#102A43] outline-none" placeholder="Ulangi password">
-            </span>
-          </label>
+          {{-- Password Baru --}}
+          <div style="margin-bottom: 16px;">
+            <label for="newPasswordInput" style="font-family: 'Poppins', sans-serif; display: block; font-size: 13px; font-weight: 500; color: #475569; margin-bottom: 8px;">
+              Password Baru
+            </label>
+            <div style="position: relative;">
+              <input
+                id="newPasswordInput"
+                name="password"
+                x-bind:type="showPassword ? 'text' : 'password'"
+                required
+                autocomplete="new-password"
+                placeholder="Minimal 8 karakter"
+                style="font-family: 'Poppins', sans-serif; width: 100%; height: 48px; border-radius: 50px; border: 1.5px solid #DBEAFE; background: #F8FAFF; padding: 0 50px 0 20px; font-size: 13px; color: #334155; outline: none; transition: all 0.2s ease; box-sizing: border-box;"
+                onfocus="this.style.borderColor='#3B82F6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.1)'; this.style.background='#FFFFFF';"
+                onblur="this.style.borderColor='#DBEAFE'; this.style.boxShadow='none'; this.style.background='#F8FAFF';"
+              >
+              <button
+                type="button"
+                x-on:click="showPassword = !showPassword"
+                style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; padding: 4px; color: #94A3B8; transition: color 0.2s;"
+                onmouseover="this.style.color='#64748B'"
+                onmouseout="this.style.color='#94A3B8'"
+                title="Tampilkan / sembunyikan password"
+              >
+                <i x-show="!showPassword" data-lucide="eye" style="width: 18px; height: 18px;"></i>
+                <i x-show="showPassword" data-lucide="eye-off" style="width: 18px; height: 18px;"></i>
+              </button>
+            </div>
+          </div>
 
-          <button type="submit" class="inline-flex h-10 w-full items-center justify-center gap-2 rounded-md bg-[#DB5A8D] text-sm font-semibold text-white transition hover:bg-[#C84A7B]">
-            <i data-lucide="lock" class="h-4 w-4"></i>
-            Reset Password
+          {{-- Konfirmasi Password Baru --}}
+          <div style="margin-bottom: 24px;">
+            <label for="newPasswordConfirmInput" style="font-family: 'Poppins', sans-serif; display: block; font-size: 13px; font-weight: 500; color: #475569; margin-bottom: 8px;">
+              Konfirmasi Password Baru
+            </label>
+            <div style="position: relative;">
+              <input
+                id="newPasswordConfirmInput"
+                name="password_confirmation"
+                x-bind:type="showConfirm ? 'text' : 'password'"
+                required
+                autocomplete="new-password"
+                placeholder="Ulangi password baru"
+                style="font-family: 'Poppins', sans-serif; width: 100%; height: 48px; border-radius: 50px; border: 1.5px solid #DBEAFE; background: #F8FAFF; padding: 0 50px 0 20px; font-size: 13px; color: #334155; outline: none; transition: all 0.2s ease; box-sizing: border-box;"
+                onfocus="this.style.borderColor='#3B82F6'; this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.1)'; this.style.background='#FFFFFF';"
+                onblur="this.style.borderColor='#DBEAFE'; this.style.boxShadow='none'; this.style.background='#F8FAFF';"
+              >
+              <button
+                type="button"
+                x-on:click="showConfirm = !showConfirm"
+                style="position: absolute; right: 16px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; padding: 4px; color: #94A3B8; transition: color 0.2s;"
+                onmouseover="this.style.color='#64748B'"
+                onmouseout="this.style.color='#94A3B8'"
+                title="Tampilkan / sembunyikan password"
+              >
+                <i x-show="!showConfirm" data-lucide="eye" style="width: 18px; height: 18px;"></i>
+                <i x-show="showConfirm" data-lucide="eye-off" style="width: 18px; height: 18px;"></i>
+              </button>
+            </div>
+          </div>
+
+          {{-- Submit Button --}}
+          <button
+            type="submit"
+            style="font-family: 'Poppins', sans-serif; width: 100%; height: 48px; border-radius: 50px; border: none; background: linear-gradient(135deg, #2563EB, #3B82F6); color: #FFFFFF; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 6px 20px rgba(37,99,235,0.25); letter-spacing: 0.2px;"
+            onmouseover="this.style.background='linear-gradient(135deg, #1D4ED8, #2563EB)'; this.style.boxShadow='0 8px 25px rgba(37,99,235,0.35)'; this.style.transform='translateY(-1px)';"
+            onmouseout="this.style.background='linear-gradient(135deg, #2563EB, #3B82F6)'; this.style.boxShadow='0 6px 20px rgba(37,99,235,0.25)'; this.style.transform='translateY(0)';"
+            onmousedown="this.style.transform='scale(0.99)'"
+            onmouseup="this.style.transform='translateY(-1px)'"
+          >
+            Perbarui Password
           </button>
         </form>
 
-        <div class="mt-5 border-t border-[#E5EEF8] pt-4 text-center text-[13px] font-medium">
-          <a href="{{ route('login') }}" class="text-[#DB5A8D] transition hover:text-[#C84A7B]">Kembali ke login</a>
+        {{-- Login Link --}}
+        <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid #F1F5F9; text-align: center;">
+          <span style="font-family: 'Poppins', sans-serif; font-size: 12px; color: #94A3B8;">Ingat password Anda?</span>
+          <a
+            href="{{ route('login') }}"
+            style="font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 600; color: #2563EB; text-decoration: none; margin-left: 4px; transition: color 0.2s;"
+            onmouseover="this.style.color='#1D4ED8'"
+            onmouseout="this.style.color='#2563EB'"
+          >
+            Masuk di sini
+          </a>
         </div>
       </div>
     </section>
