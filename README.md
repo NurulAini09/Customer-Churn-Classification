@@ -131,15 +131,3 @@ Script akan secara otomatis:
 ```
 
 ---
-
-## 👤 Akun Login Default
-Sistem menyediakan akun bawaan untuk pengujian awal:
-- **Email**: `admin@churnpredict.local`
-- **Password**: `password`
-
-*(Anda juga dapat membuat akun baru melalui menu **Daftar Akun** pada halaman login/landing page).*
-
----
-
-## 📄 Lisensi
-Hak Cipta © 2026 **Sistem Klasifikasi Churn Pelanggan**. Seluruh hak cipta dilindungi undang-undang.
